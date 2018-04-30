@@ -1,0 +1,16 @@
+{
+  "name": "decentracord",
+  "version": "1.0.0",
+  "description": "An app like discord just decentralized!",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lukas2005",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "electron": "^1.8.6",
+    "pug": "^2.0.3"
+  }
+}
