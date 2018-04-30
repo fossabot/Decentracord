@@ -1,7 +1,4 @@
-const Web3 = require("web3");
-
 module.exports = {
-	web3: Web3,
 	networks: {
 		dev: {
 			host: "127.0.0.1",

@@ -1,11 +1,11 @@
-const config = require("../truffle.js");
+const Web3 = require("web3");
 
 const Storage = artifacts.require("Storage");
 const Decentracord = artifacts.require("Decentracord");
 
 let storage;
 
-let sha3 = config.web3.soliditySha3;
+let sha3 = Web3.utils.soliditySha3;
 
 module.exports = (deployer) => {
 	// Deploy storage
@@ -19,13 +19,15 @@ module.exports = (deployer) => {
 
 		// Deploy other contracts
 		return deployer.deploy(
-			[Decentracord, Storage.address]
+			Decentracord, Storage.address
 		);
 	}).then(() => {
 		// Register contracts with the hub (the Storage contract)
 		registerContract(Decentracord, "Main");
 	});
 };
+
+console.log(Web3);
 
 function registerContract(contract, name) {
 	storage.setAddress(sha3("contract.name", name), contract.address);

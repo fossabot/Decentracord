@@ -32,7 +32,6 @@ module.exports = {
         "socket": false,
         "google": false,
         "nameIntoCode": false,
-        "artifacts": false,
-        "Web3": false
+        "artifacts": false
     }
 };
