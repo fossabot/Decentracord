@@ -1,5 +1,5 @@
 const pug = require("pug"); 
- 
+
 const electron = require("electron");             
 const {app, BrowserWindow} = electron;
 
@@ -56,5 +56,8 @@ function loadPUG(window, file, options) {
 
 	fs.writeFileSync(pathToFile+".html", pug.renderFile(pathToFile+".pug", options));
 
-	//window.loadURL("file://"+pathToFile+".html");
-}
+	window.loadURL(url.format({
+		pathname: pathToFile+".html",
+		protocol: "file:",
+		slashes: true
+	}));}
