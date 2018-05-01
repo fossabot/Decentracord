@@ -9,24 +9,9 @@ const Web3 = require("web3");
 
 let storage;
 
-let sha3;
-
 module.exports = (deployer, network) => {
-	let web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-	sha3 = (args) => {
-		let s = "";
-		if (args instanceof Array) {
-			args.forEach(e => {
-				s+=e;
-			});
-		} else {
-			s = args;
-		}
-		web3.sha3(s);
-	};
-
 	// Deploy storage
-	deployer.deploy(Storage, { overwrite: false }).then(() => {
+	deployer.deploy(Storage, { overwrite: network == "dev" ? true : false }).then(() => {
 		// Log the storage address
 		console.log("The storage contract's address is:");
 		console.log(Storage.address);
@@ -51,8 +36,8 @@ module.exports = (deployer, network) => {
 };
 
 function registerContract(contract, name) {
-	storage.setAddress(sha3(["contract.name", name]), contract.address);
-	storage.setAddress(sha3(["contract.address", contract.address]), contract.address);
+	storage.setAddress("contract.name"+name, contract.address);
+	storage.setAddress("contract.address"+contract.address, contract.address);
 }
 
 /**
@@ -61,7 +46,7 @@ function registerContract(contract, name) {
  * If not sealed then can be changed by the owner AND by the registered contracts
  */
 function sealStorage() {
-	storage.setBool(sha3("contract.storage.initialised"), true);
+	storage.setBool("contract.storage.initialised", true);
 }
 
 function createImportScript(contract) {
