@@ -1,11 +1,13 @@
-const Web3 = require("web3");
+//const Web3 = require("web3");
 
 const Storage = artifacts.require("Storage");
 const Decentracord = artifacts.require("Decentracord");
 
+const fs = require("fs");
+
 let storage;
 
-let sha3 = Web3.utils.soliditySha3;
+//let sha3 = Web3.utils.soliditySha3;
 
 module.exports = (deployer) => {
 	// Deploy storage
@@ -24,14 +26,16 @@ module.exports = (deployer) => {
 	}).then(() => {
 		// Register contracts with the hub (the Storage contract)
 		registerContract(Decentracord, "Main");
+	}).then(() => {
+		// Create a Data file for the storage contract
+		createImportFile(Storage, "Storage");
+		createImportFile(Decentracord, "Decentracord");
 	});
 };
 
-console.log(Web3);
-
 function registerContract(contract, name) {
-	storage.setAddress(sha3("contract.name", name), contract.address);
-	storage.setAddress(sha3("contract.address", contract.address), contract.address);
+	//storage.setAddress(sha3("contract.name", name), contract.address);
+	//storage.setAddress(sha3("contract.address", contract.address), contract.address);
 }
 
 /**
@@ -40,5 +44,15 @@ function registerContract(contract, name) {
  * If not sealed then can be changed by the owner AND by the registered contracts
  */
 function sealStorage() {
-	storage.setBool(sha3("contract.storage.initialised"), true);
+	//storage.setBool(sha3("contract.storage.initialised"), true);
+}
+
+function createImportFile(contract, name) {
+	fs.readFile("./build/contracts/"+name+".json", function(er, jsonData) {
+		let abi = JSON.parse(jsonData);
+
+		let withExports = "module.exports = {Address: "+contract.address+", ABI: " + JSON.stringify(abi, null, "\t") + "};";
+
+		fs.writeFileSync("./app/"+name+"Data.js", withExports);
+	});
 }
