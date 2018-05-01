@@ -1,8 +1,8 @@
 pragma solidity ^0.4.23;
 
-import "./Owned.sol";
+import "./ownership/Claimable.sol";
 
-contract Storage is Owned {
+contract Storage is Claimable {
 
 
 	/**** Storage Types *******/

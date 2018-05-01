@@ -5,8 +5,7 @@ const url = require("url");
 const path = require("path");
 const fs = require("fs");
 
-//const Web3 = require("web3");
-//let sha3 = Web3.utils.soliditySha3;
+const Web3 = require("web3");
 
 let userDataPath;
 
@@ -23,27 +22,33 @@ userDataPath = app.getPath("userData");
 
 let configFile = path.join(userDataPath, "config.json");
 
-let StorageData = require("./StorageData");
-let StorageContract;
 let dataStore;
-
-let DecentracordData = require("./DecentracordData");
-let DecentracordContract;
 let Decentracord;
+
+let sha3;
 
 if (fs.existsSync(configFile)) {
 	fs.readFile(configFile, function(err, data) {
 		config = JSON.parse(data);
 
-		//web3 = new Web3(new Web3.providers.HttpProvider(config.web3.providerUrl));
+		web3 = new Web3(new Web3.providers.HttpProvider(config.web3.providerUrl));
 		
+		sha3 = (args) => {
+			let s = "";
+			if (args instanceof Array) {
+				args.forEach(e => {
+					s+=e;
+				});
+			} else {
+				s = args;
+			}
+			web3.sha3(s);
+		};
+
 		web3.eth.defaultAccount = web3.eth.accounts[0];
 
-		StorageContract = web3.eth.contract(StorageData.ABI);
-		dataStore = StorageContract.at(StorageData.Address);
-
-		DecentracordContract = web3.eth.contract(DecentracordData.ABI);
-		//dataStore = DecentracordContract.at(dataStore.getAddress(sha3("contract.name", "Main")));
+		dataStore = require("./contracts/Storage")(web3);
+		Decentracord = require("./contracts/Decentracord")(web3, dataStore.getAddress());
 	});
 } else {
 	fs.writeFileSync(configFile, JSON.stringify(config, null, "\t"));

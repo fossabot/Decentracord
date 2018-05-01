@@ -5,11 +5,26 @@ const Decentracord = artifacts.require("Decentracord");
 
 const fs = require("fs");
 
+const Web3 = require("web3");
+
 let storage;
 
-//let sha3 = Web3.utils.soliditySha3;
+let sha3;
 
-module.exports = (deployer) => {
+module.exports = (deployer, network) => {
+	let web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+	sha3 = (args) => {
+		let s = "";
+		if (args instanceof Array) {
+			args.forEach(e => {
+				s+=e;
+			});
+		} else {
+			s = args;
+		}
+		web3.sha3(s);
+	};
+
 	// Deploy storage
 	deployer.deploy(Storage, { overwrite: false }).then(() => {
 		// Log the storage address
@@ -17,7 +32,9 @@ module.exports = (deployer) => {
 		console.log(Storage.address);
 
 		// Get the deployed storage instance
-		storage = Storage.deployed();
+		Storage.deployed().then((inst) => {
+			storage = inst;
+		});
 
 		// Deploy other contracts
 		return deployer.deploy(
@@ -26,16 +43,16 @@ module.exports = (deployer) => {
 	}).then(() => {
 		// Register contracts with the hub (the Storage contract)
 		registerContract(Decentracord, "Main");
-	}).then(() => {
-		// Create a Data file for the storage contract
-		createImportFile(Storage, "Storage");
-		createImportFile(Decentracord, "Decentracord");
+
+		// Create contract import scripts for the frontend app
+		createImportScript(Storage);
+		createImportScript(Decentracord);
 	});
 };
 
 function registerContract(contract, name) {
-	//storage.setAddress(sha3("contract.name", name), contract.address);
-	//storage.setAddress(sha3("contract.address", contract.address), contract.address);
+	storage.setAddress(sha3(["contract.name", name]), contract.address);
+	storage.setAddress(sha3(["contract.address", contract.address]), contract.address);
 }
 
 /**
@@ -44,15 +61,12 @@ function registerContract(contract, name) {
  * If not sealed then can be changed by the owner AND by the registered contracts
  */
 function sealStorage() {
-	//storage.setBool(sha3("contract.storage.initialised"), true);
+	storage.setBool(sha3("contract.storage.initialised"), true);
 }
 
-function createImportFile(contract, name) {
-	fs.readFile("./build/contracts/"+name+".json", function(er, jsonData) {
-		let abi = JSON.parse(jsonData);
+function createImportScript(contract) {
+	let js = "let ABI = "+JSON.stringify(contract.abi)+";\r\n";
+	js    += "module.exports = (web3, address) => { let Contract = web3.eth.contract(ABI); return Contract.at(!address ? "+contract.address+" : address); };";
 
-		let withExports = "module.exports = {Address: "+contract.address+", ABI: " + JSON.stringify(abi, null, "\t") + "};";
-
-		fs.writeFileSync("./app/"+name+"Data.js", withExports);
-	});
+	fs.writeFileSync("./app/contracts/"+contract.contractName+".js", js);
 }
