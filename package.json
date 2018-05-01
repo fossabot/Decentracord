@@ -18,5 +18,16 @@
   },
   "devDependencies": {
     "truffle": "^4.1.7"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukas2005/Decentracord.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lukas2005/Decentracord/issues"
+  },
+  "homepage": "https://github.com/lukas2005/Decentracord#readme"
 }
