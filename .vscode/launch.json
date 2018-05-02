@@ -9,8 +9,14 @@
             "request": "launch",
             "name": "Electron Main",
             "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
-            "program": "${workspaceFolder}/app/index.js",
+            "program": "${workspaceFolder}/app/electron_app/index.js",
             "protocol": "inspector"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch build.js",
+            "program": "${workspaceFolder}/app/web_app/build.js"
         },
         {
             "type": "node",

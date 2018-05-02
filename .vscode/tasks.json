@@ -12,6 +12,16 @@
             "type": "npm",
             "script": "testnet",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "build_web",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "build_app_wl",
+            "problemMatcher": []
         }
     ]
 }

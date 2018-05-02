@@ -2,25 +2,32 @@
   "name": "decentracord",
   "version": "1.0.0",
   "description": "An app like discord just decentralized!",
-  "main": "app/index.js",
+  "main": "app/electron_app/index.js",
   "scripts": {
     "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build_web": "node app/web_app/build.js",
+    "build_app_wl": "electron-builder -wl",
+    "build_app": "electron-builder -mwl",
     "live": "truffle.cmd migrate --network live",
-    "testnet": "truffle.cmd migrate --network dev --reset",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "testnet": "truffle.cmd migrate --network dev --reset"
   },
-  "author": "lukas2005",
+  "author": {
+    "name": "lukas2005",
+    "email": "lukas2005.38@gmail.com"
+  },
   "license": "GPL-3.0",
   "dependencies": {
-    "electron": "^1.8.6",
-    "pug": "^2.0.3",
+    "go-ipfs-dep": "^0.4.14",
+    "ipfsd-ctl": "^0.32.1",
     "web3": "github:ethereum/web3.js"
   },
   "devDependencies": {
+    "electron": "^1.8.6",
+    "electron-builder": "^20.11.1",
+    "ncp": "^2.0.0",
+    "pug": "^2.0.3",
     "truffle": "^4.1.7"
-  },
-  "directories": {
-    "test": "test"
   },
   "repository": {
     "type": "git",
@@ -29,5 +36,21 @@
   "bugs": {
     "url": "https://github.com/lukas2005/Decentracord/issues"
   },
-  "homepage": "https://github.com/lukas2005/Decentracord#readme"
+  "homepage": "https://github.com/lukas2005/Decentracord",
+  "build": {
+    "appId": "io.github.lukas2005.decentracord",
+    "productName": "Decentracord",
+    "directories": {
+      "output": "build/app"
+    },
+    "files": [
+      "app/electron_app/*"
+    ],
+    "portable": {
+      "requestExecutionLevel": "user"
+    },
+    "win": {
+      "target": ["nsis", "portable"]
+    }
+  }
 }
