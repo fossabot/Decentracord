@@ -17,7 +17,7 @@ before_cache:
 - rm -rf $HOME/.cache/electron-builder/wine
 script:
 - npm run deploy_app
-- npm run build_web
+# - npm run build_web
 # deploy:
 #   provider: releases
 #   api_key: 
