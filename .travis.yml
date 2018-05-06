@@ -1,0 +1,33 @@
+language: node_js
+node_js:
+- 9.8.0
+os: osx
+env:
+  global:
+  - ELECTRON_CACHE=$HOME/.cache/electron
+  - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+  - secure: fbIlSsb25dSpCCg/10k4RgMLROcsLs+LFdWmpPO30DjId9axTx4ANtDD7ZYxm+0GRUgTliLccgOPlwdJ3Oo4RVWDKCGQgr1cWWLtjD+5feQDu7//UJ0eP3WS3eW6giYfbh661/+7nognz1+cStfTGlu0aXtN82SbP3k3DBRis/oTPv7Va7HveyZ+MoTxaOEuJgX4oY2PIh/phE/X623B9q0Oe2yxKGvVPAnXFgpWp+7Hmjrs0U62tMdy/ZwM1rvTKbWBusi7STExXeRjDZ8nmumqljElXFRkd5wzk+XyQKWStrrcsUDeX2xmWtMCn61RMtq/Dq36KggKGDiFLukYEHuEl//TSRns4zhPK1pVjyiZcQjbPKZ0kSDfHVuEy2J9v0+pKwGQZT1IyyzaIMfKYLpIFR+qeSmoLAPar/V07+Ppf4rkvsjixefKVVt67KDeEARHctcWIjsaVOR/dfs/rmJptPb9/lFRtBQ1nL1/mCZ7YYOj45psbU/ee4/T5RkVJhRqd/zc1Ro3xRdicAB98OyocIMInedMXV+TgJosak6xvIgYEXg2u5tB4L6yoMGWdGtXTDOEJLA+MDCgjO5WV9zeZy0ZaIWv9XyaNTp5XE0D5C7zNHKdVhMxv7vXgSR7HxcKW0CxHiVuerBWZC2rN/rb0Hxo6kWoPee0C4hK4GY=
+cache:
+  directories:
+  - node_modules
+  - "$HOME/.cache/electron"
+  - "$HOME/.cache/electron-builder"
+  - "$HOME/.npm/_prebuilds"
+before_cache:
+- rm -rf $HOME/.cache/electron-builder/wine
+script:
+- npm run deploy_app
+- npm run build_web
+# deploy:
+#   provider: releases
+#   api_key: 
+#   file:
+#   - build/app/Decentracord *.*.*.exe
+#   - build/app/Decentracord Setup *.*.*.exe
+#   - build/app/Decentracord-*.*.*-win.7z
+#   - build/app/decentracord_*.*.*_amd64.snap
+#   - build/app/decentracord-*.*.*-x86_64.AppImage
+#   - build/app/decentracord-*.*.*.7z
+#   on:
+#     tags: true
+#     repo: lukas2005/Decentracord

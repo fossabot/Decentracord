@@ -22,6 +22,11 @@
             "type": "npm",
             "script": "build_app_wl",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "deploy_app",
+            "problemMatcher": []
         }
     ]
 }

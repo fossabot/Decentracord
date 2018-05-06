@@ -9,6 +9,7 @@
     "build_web": "node app/web_app/build.js",
     "build_app_wl": "electron-builder -wl",
     "build_app": "electron-builder -mwl",
+    "deploy_app": "electron-builder -mwl -p onTagOrDraft",
     "live": "truffle.cmd migrate --network live",
     "testnet": "truffle.cmd migrate --network dev --reset"
   },
@@ -40,6 +41,7 @@
   "build": {
     "appId": "io.github.lukas2005.decentracord",
     "productName": "Decentracord",
+    "publish": ["github"],
     "directories": {
       "output": "build/app"
     },
@@ -50,7 +52,13 @@
       "requestExecutionLevel": "user"
     },
     "win": {
-      "target": ["nsis", "portable"]
+      "target": ["nsis", "portable", "7z"]
+    },
+    "linux": {
+      "target": ["AppImage", "snap", "7z"]
+    },
+    "mac": {
+      "target": ["dmg", "7z"]
     }
   }
 }
